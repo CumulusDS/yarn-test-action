@@ -1,26 +1,25 @@
-name: 'action-template'
-description: 'description'
-inputs:
-  input:
-    description: 'description'
-    required: false
-    default: ''
-outputs:
-  result:
-    description: "results"
-    value: "${{ steps.action.outputs.result }}"
+name: 'Yarn Tests'
+description: 'Check Licenses, Start Flow Server, Yarn Test'
+inputs: {}
+outputs: {}
 runs:
   using: "composite"
   steps:
-    - name: install cfn_nag_scan
-      id: install
+    - id: check-licenses
       run: |
-        echo "::group::Title"
-        echo "some message"
+        echo "::group::Check Licenses"
+        yarn build:license-checker
         echo "::endgroup::"
       shell: bash
-    - name: Print Output
-      id: print
+    - id: start-flow-server
       run: |
-        echo "${{ steps.action.outputs.result }}"
+        echo "::group::Star Flow Server"
+        yarn flow start
+        echo "::endgroup::"
+      shell: bash
+    - id: yarn-test
+      run: |
+        echo "::group::yarn test"
+        yarn test
+        echo "::endgroup::"
       shell: bash
