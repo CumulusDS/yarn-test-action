@@ -1,6 +1,10 @@
 name: 'Yarn Tests'
 description: 'Check Licenses, Start Flow Server, Yarn Test'
-inputs: {}
+inputs:
+  args:
+    description: "Additional arguments for yarn test command"
+    default: ""
+    required: false
 outputs: {}
 runs:
   using: "composite"
@@ -23,6 +27,7 @@ runs:
       id: yarn-test
       run: |
         echo "::group::yarn test"
-        yarn test
+        args+=(${{ inputs.args }})
+        yarn test "${args[@]}"
         echo "::endgroup::"
       shell: bash
